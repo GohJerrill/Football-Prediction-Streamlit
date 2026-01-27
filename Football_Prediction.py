@@ -13,8 +13,10 @@ import joblib
 
 '''
     Commit 1 - Initial Commit - 27 January 2026
-    
+
     Commit 2 - Did the Overview, EDA, Dataset Definitions and a mock design for the predictions - 28 January 2026
+
+    Commit 3 - Did the predictions, generated the images, preparing to validate see if everything good - 28 January 2026
 
 '''
 
@@ -161,7 +163,7 @@ if {"primary_position", "value_euro"}.issubset(df.columns):
     # Order categories by total descending (just like your boxplot example)
     fig.update_layout(xaxis={"categoryorder": "total descending"})
 
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width='stretch')
 
 
     st.markdown(f"""
@@ -207,7 +209,7 @@ if {"age", "value_euro"}.issubset(df.columns):
         }
     )
 
-    st.plotly_chart(fig_age, use_container_width=True)
+    st.plotly_chart(fig_age, width='stretch')
 
     st.markdown(f"""
 From this dataset, players around **age 31** are peaking the hardest,
@@ -242,7 +244,7 @@ if {"overall_rating", "value_euro"}.issubset(df.columns):
         opacity=0.35
     )
 
-    st.plotly_chart(fig_scatter, use_container_width=True)
+    st.plotly_chart(fig_scatter, width='stretch')
 
     # Correlation for extra sauce
     corr = df_scatter[["overall_rating", "value_million"]].corr().iloc[0, 1]
@@ -262,6 +264,30 @@ else:
 
 st.divider()
 
+##=============================================== PREDICTION TIME ================================================= ## 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 st.markdown('<a id="predictor"></a>', unsafe_allow_html=True)
 st.subheader("Prediction time my guy 🤑💵💰💸")
 
@@ -270,70 +296,89 @@ Fill in your **player stats** below and let the model tell you
 Lets see how much you are **worth my brother/sister.**
 """)
 
-# Use columns to make the form less tall
-col1, col2, col3 = st.columns(3)
+# Helper: map primary position -> position group
+def get_position_group(primary_position: str) -> str:
+    defenders = {"CB", "LB", "RB", "LWB", "RWB"}
+    midfielders = {"CDM", "CM", "CAM", "LM", "RM"}
+    attackers = {"LW", "RW", "ST", "CF"}
 
-# ========== BASIC INFO ==========
-with col1:
-    age = st.number_input("Age", min_value=15, max_value=45, value=24)
-    height_cm = st.number_input("Height (cm)", min_value=150, max_value=210, value=180)
-    weight_kgs = st.number_input("Weight (kg)", min_value=50, max_value=110, value=75)
+    if primary_position == "GK":
+        return "Goalkeeper"
+    elif primary_position in defenders:
+        return "Defender"
+    elif primary_position in midfielders:
+        return "Midfielder"
+    elif primary_position in attackers:
+        return "Attacker"
+    else:
+        return "Midfielder"
 
-with col2:
-    overall_rating = st.slider("Overall Rating (0-99)", min_value=40, max_value=99, value=80)
-    potential = st.slider("Potential (0-99)", min_value=40, max_value=99, value=85)
-    wage_euro = st.number_input("Weekly Wage (€)", min_value=0, max_value=1_000_000, value=50_000, step=5_000)
 
-with col3:
-    preferred_foot = st.selectbox("Preferred Foot", ["Right", "Left"])
-    primary_position = st.selectbox(
-        "Primary Position",
-        ["GK", "CB", "LB", "RB", "LWB", "RWB", "CDM", "CM", "CAM", "LM", "RM", "LW", "RW", "ST", "CF"]
-    )
-    position_group = st.selectbox(
-        "Position Group",
-        ["Goalkeeper", "Defender", "Midfielder", "Attacker"]
-    )
+# ====================== PROFILE ======================
 
+
+
+st.markdown("### Profile 👤")
+
+age = st.number_input("Age (years)", min_value=15, max_value=45, value=24)
+height_cm = st.number_input("Height (cm)", min_value=150, max_value=210, value=180)
+weight_kgs = st.number_input("Weight (kg)", min_value=50, max_value=110, value=75)
+
+preferred_foot = st.selectbox("Preferred Foot", ["Right", "Left"])
+body_type_clean = st.selectbox("Body Type", ["Lean", "Normal", "Stocky", "Other"])
+continent = st.selectbox(
+    "Continent",
+    ["Europe", "South America", "North America", "Africa", "Asia", "Oceania"]
+)
 
 st.divider()
 
+# ====================== FOOTBALL ADMIN ======================
 
-st.markdown("### Technical / Style Vibes 🎯")
 
-col4, col5, col6 = st.columns(3)
 
-with col4:
-    international_rep = st.slider("International Reputation (1-5)", 1, 5, 1)
-    weak_foot = st.slider("Weak Foot (1-5)", 1, 5, 3)
-    skill_moves = st.slider("Skill Moves (1-5)", 1, 5, 3)
 
-with col5:
-    body_type_clean = st.selectbox("Body Type", ["Lean", "Normal", "Stocky", "Other"])
-    continent = st.selectbox(
-        "Continent",
-        ["Europe", "South America", "North America", "Africa", "Asia", "Oceania"]
-    )
+st.markdown("### Football Admin 🧾")
 
-with col6:
-    pace_index = st.slider("Pace Index (0-99)", 0, 99, 80)
-    shooting_index = st.slider("Shooting Index (0-99)", 0, 99, 75)
-    passing_index = st.slider("Passing Index (0-99)", 0, 99, 75)
+overall_rating = st.slider("Overall Rating (0-99)", min_value=40, max_value=99, value=80)
+potential = st.slider("Potential (0-99)", min_value=40, max_value=99, value=85)
+wage_euro = st.number_input("Weekly Wage (€)", min_value=0, max_value=5_000_000, value=50_000, step=10_000)
 
-col7, col8, col9 = st.columns(3)
+primary_position = st.selectbox(
+    "Primary Position",
+    ["GK", "CB", "LB", "RB", "LWB", "RWB", "CDM", "CM", "CAM", "LM", "RM", "LW", "RW", "ST", "CF"]
+)
 
-with col7:
-    dribbling_index = st.slider("Dribbling Index (0-99)", 0, 99, 78)
+# Auto-compute position group from primary position
+position_group = get_position_group(primary_position)
+st.caption(f"For the model, you are treated as a **{position_group}**.")
 
-with col8:
-    defending_index = st.slider("Defending Index (0-99)", 0, 99, 60)
-
-with col9:
-    physical_index = st.slider("Physical Index (0-99)", 0, 99, 80)
-
-# Growth is derived, not manually input
+# Auto-compute growth
 growth = max(potential - overall_rating, 0)
+st.caption(f"Growth (potential - overall) computed as: **{growth}**")
 
+st.divider()
+
+# ====================== FOOTBALL STATS ======================
+
+
+st.markdown("### Football Stats 📊")
+
+international_rep = st.slider("International Reputation (1-5)", 1, 5, 1)
+weak_foot = st.slider("Weak Foot (1-5)", 1, 5, 3)
+skill_moves = st.slider("Skill Moves (1-5)", 1, 5, 3)
+
+pace_index = st.slider("Pace Index (0-99)", 0, 99, 80)
+shooting_index = st.slider("Shooting Index (0-99)", 0, 99, 75)
+passing_index = st.slider("Passing Index (0-99)", 0, 99, 75)
+
+dribbling_index = st.slider("Dribbling Index (0-99)", 0, 99, 78)
+defending_index = st.slider("Defending Index (0-99)", 0, 99, 60)
+physical_index = st.slider("Physical Index (0-99)", 0, 99, 80)
+
+st.divider()
+
+# ===== Build feature dict based on your model's expected columns =====
 # ===== Build feature dict based on your model's expected columns =====
 raw_features = {
     "age": age,
@@ -359,28 +404,74 @@ raw_features = {
     "position_group": position_group,
 }
 
-# Keep only columns your model actually expects, and order them correctly
-input_df = pd.DataFrame([raw_features])
-input_df = input_df[[col for col in feature_columns if col in input_df.columns]]
+# === OHE to match BEST_FOOTBALL_MODEL_INTHEWORLD_COLUMNS ===
+input_raw_df = pd.DataFrame([raw_features])
+input_ohe = pd.get_dummies(input_raw_df)
 
-st.markdown("----")
+for col in feature_columns:
+    if col not in input_ohe.columns:
+        input_ohe[col] = 0
+
+input_ohe = input_ohe[feature_columns]
 
 if st.button("Predict my transfer value 🧾💸"):
     try:
-        prediction = model.predict(input_df)[0]  # raw euros
+        # 1) Model predicts in LOG space
+        pred_log = model.predict(input_ohe)[0]
+
+        # 2) Convert back to EURO space
+        prediction = float(np.expm1(pred_log))   # now this is € value
         value_million = prediction / 1_000_000
 
-        st.success(f"Your predicted market value is **€{prediction:,.0f}**  (~**€{value_million:,.2f} million**)")
+        st.success(
+            f"Your predicted market value is **€{prediction:,.0f}**  "
+            f"(~**€{value_million:,.2f} million**)"
+        )
 
-        if value_million < 1:
-            st.write("Ngl… that's **rotation player / free transfer** energy. But we move 🥲")
+        # ===================== TIER + IMAGE LOGIC =====================
+        img_path = None
+        img_caption = ""
+        tier_text = ""
+
+        if value_million < 5:
+            # 0 – 5M
+            img_path = "Images/BenchWarmer.png"
+            img_caption = "Bench Warmer"
+            tier_text = "BenchWarmer Material."
+        
         elif value_million < 10:
-            st.write("Solid player, respectable bag. **Europa League merchant** vibes. 😎")
+            # 5 – 10M
+            img_path = "Images/BrotherActBig.png"
+            img_caption = "Act Big Only"
+            tier_text = "GOAT."
+        
+        elif value_million < 30:
+            # 10 – 30M
+            img_path = "Images/RotationPlayer.png"
+            img_caption = "Reliable Rotation Player"
+            tier_text = "Respectable. **Rotation player** for Europa / UCL clubs. Very solid. 😎"
+        
+        elif value_million < 85:
+            # 30 – 85M
+            img_path = "Images/Starting11.png"
+            img_caption = "Starting XI "
+            tier_text = "Slay zest bestie"
+        
         else:
-            st.write("Okay superstar, relax. This is **Ballon d'Or conversation** money. 🏆🔥")
+            # 85M+
+            img_path = "Images/AnkaraMessi.png"
+            img_caption = "Ballon d'Or Level 🏆"
+            tier_text = "**Ballon d'Or conversation** money. World-class. 🔥"
+
+        st.write(tier_text)
+
+        if img_path is not None:
+            st.image(img_path, caption=img_caption, width="stretch")
+
     except Exception as e:
         st.error("Something went wrong when making the prediction. Check the feature columns / model file.")
         st.text(str(e))
+
 
 
 

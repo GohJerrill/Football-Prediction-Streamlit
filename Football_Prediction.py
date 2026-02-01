@@ -18,6 +18,8 @@ import joblib
 
     Commit 3 - Did the predictions, generated the images, preparing to validate see if everything good - 28 January 2026
 
+    Commit 4 - Validated the model, Preparing for more future testing and the ReadME - 1 February 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")
@@ -379,7 +381,6 @@ physical_index = st.slider("Physical Index (0-99)", 0, 99, 80)
 st.divider()
 
 # ===== Build feature dict based on your model's expected columns =====
-# ===== Build feature dict based on your model's expected columns =====
 raw_features = {
     "age": age,
     "height_cm": height_cm,
@@ -416,11 +417,25 @@ input_ohe = input_ohe[feature_columns]
 
 if st.button("Predict my transfer value 🧾💸"):
     try:
+
+        st.divider()
+        st.markdown('<a id="results"></a>', unsafe_allow_html=True)
+        st.subheader("RESULTS BABY ⚽⚽⚽")
+
+        # VIEW: show raw + encoded input
+        st.markdown("#### Table: Raw Input DataFrame")
+        st.dataframe(input_raw_df)
+
+        st.markdown("#### Table: One-Hot Encoded Input (Model Features)")
+        st.dataframe(input_ohe)
+
+
+
         # 1) Model predicts in LOG space
         pred_log = model.predict(input_ohe)[0]
 
         # 2) Convert back to EURO space
-        prediction = float(np.expm1(pred_log))   # now this is € value
+        prediction = float(np.expm1(pred_log)) # Convert to € value
         value_million = prediction / 1_000_000
 
         st.success(

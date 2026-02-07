@@ -20,6 +20,8 @@ import joblib
 
     Commit 4 - Validated the model and changed it from the workflow, Preparing for more future testing and the ReadME - 7 February 2026
 
+    Commit 5 - Included a ReadMe File and requirements.txt - 7 Feburary 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")

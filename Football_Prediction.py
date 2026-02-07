@@ -18,7 +18,7 @@ import joblib
 
     Commit 3 - Did the predictions, generated the images, preparing to validate see if everything good - 28 January 2026
 
-    Commit 4 - Validated the model, Preparing for more future testing and the ReadME - 1 February 2026
+    Commit 4 - Validated the model and changed it from the workflow, Preparing for more future testing and the ReadME - 7 February 2026
 
 '''
 
@@ -43,8 +43,8 @@ df = load_data()
 
 @st.cache_resource
 def load_model_and_columns():
-    model = joblib.load("BEST_FOOTBALL_MODEL_INTHEWORLD.joblib")  # change name if different
-    feature_columns = joblib.load("BEST_FOOTBALL_MODEL_INTHEWORLD_COLUMNS.joblib")
+    model = joblib.load("BEST_FOOTBALL_MODEL_INTHEWORLD2.joblib")  # change name if different
+    feature_columns = joblib.load("BEST_FOOTBALL_MODEL_INTHEWORLD_COLUMNS2.joblib")
     return model, feature_columns
 
 model, feature_columns = load_model_and_columns()

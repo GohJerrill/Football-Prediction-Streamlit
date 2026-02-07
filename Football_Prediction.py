@@ -22,6 +22,8 @@ import joblib
 
     Commit 5 - Included a ReadMe File and requirements.txt - 7 Feburary 2026
 
+    Commit 6 - Modified the ReadME file changed the slight UI for the streamlit application. Preparing for bug squashing and publish streamlit - 8 January 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")
@@ -261,7 +263,7 @@ This chart is basically **FIFA logic in real life**:
 
 The correlation between overall and value here is about **{corr:.2f}**,  
 So you better get you **overall rating** up my guy, the higher it is the better your chances
-of being valued higher than **1 Euros.**
+of being valued higher than **1 Euro.**
 """)
 else:
     st.warning("Columns `overall_rating` and/or `value_euro` are missing from the dataset.")
@@ -325,8 +327,16 @@ def get_position_group(primary_position: str) -> str:
 st.markdown("### Profile 👤")
 
 age = st.number_input("Age (years)", min_value=15, max_value=45, value=24)
-height_cm = st.number_input("Height (cm)", min_value=150, max_value=210, value=180)
-weight_kgs = st.number_input("Weight (kg)", min_value=50, max_value=110, value=75)
+height_cm = st.number_input("Height (cm)", min_value=140, max_value=220, value=180, step=1)
+weight_kgs = st.number_input(
+    "Weight (kg)",
+    min_value=40.0,
+    max_value=200.0,   
+    value=75.0,
+    step=0.5,
+    format="%.1f"
+)
+
 
 preferred_foot = st.selectbox("Preferred Foot", ["Right", "Left"])
 body_type_clean = st.selectbox("Body Type", ["Lean", "Normal", "Stocky", "Other"])
@@ -424,15 +434,6 @@ if st.button("Predict my transfer value 🧾💸"):
         st.markdown('<a id="results"></a>', unsafe_allow_html=True)
         st.subheader("RESULTS BABY ⚽⚽⚽")
 
-        # VIEW: show raw + encoded input
-        st.markdown("#### Table: Raw Input DataFrame")
-        st.dataframe(input_raw_df)
-
-        st.markdown("#### Table: One-Hot Encoded Input (Model Features)")
-        st.dataframe(input_ohe)
-
-
-
         # 1) Model predicts in LOG space
         pred_log = model.predict(input_ohe)[0]
 
@@ -484,6 +485,14 @@ if st.button("Predict my transfer value 🧾💸"):
 
         if img_path is not None:
             st.image(img_path, caption=img_caption, width="stretch")
+
+        # VIEW: show raw + encoded input
+        st.markdown("#### Table: Raw Input DataFrame")
+        st.dataframe(input_raw_df)
+
+        st.markdown("#### Table: One-Hot Encoded Input")
+        st.dataframe(input_ohe)
+
 
     except Exception as e:
         st.error("Something went wrong when making the prediction. Check the feature columns / model file.")

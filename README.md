@@ -93,7 +93,7 @@ technical indices: pace_index, shooting_index, passing_index, dribbling_index, d
 
 growth: max(potential - overall_rating, 0)
 
-#### Experiemnt 5 and 5_2 
+#### Experiment 5 and 5_2 
 position_group: broad role grouping (GK/Def/Mid/Attacker) and performing logging on the value euro
 
 Notable result:
@@ -154,5 +154,7 @@ value tiers + themed images when predicting
 First install all relevant packages and dependencies using: pip install -r requirements.txt
 
 python -m streamlit run Football_Prediction.py
-# or
+
+OR
+
 streamlit run Football_Prediction.py

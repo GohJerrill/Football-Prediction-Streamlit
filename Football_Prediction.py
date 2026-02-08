@@ -28,6 +28,8 @@ import joblib
 
     Commit 8 - Made some changes to my requirements.txt as it is having troubles deploying in streamlit - 8 February 2026
 
+    Commit 9 - Modified my requirements.txt as streamlit has some issues - 8 Feb 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")

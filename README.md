@@ -2,6 +2,7 @@
 
 This project trains and evaluates a machine learning model to predict professional football players’ market value (EUR) from player attributes (age, overall/potential, wage, position, technical stats, etc.). It includes an end-to-end modelling pipeline (baseline → feature engineering → log-transform → hyperparameter tuning) and a Streamlit app for EDA + predictions.
 
+Visit this link here for Streamlit: https://footballvaluepriceprediction.streamlit.app
 
 ## Dataset
 

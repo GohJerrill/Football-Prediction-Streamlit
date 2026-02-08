@@ -30,6 +30,8 @@ import joblib
 
     Commit 9 - Modified my requirements.txt as streamlit has some issues - 8 Feb 2026
 
+    Commit 10 - Added the link in the ReadMe file so people can view it more in depths - 9 Feb 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")

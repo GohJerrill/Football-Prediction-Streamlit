@@ -125,13 +125,17 @@ engineered features + OHE
 
 Holdout results:
 
-R² (log) ≈ 0.9977
+R² (log) ≈ 0.9979
 
-RMSE ≈ €798k (still checking might have some error)
+RMSE ≈ €504k 
 
-MAE ≈ €153k
+MAE ≈ €116k
 
 (As expected, holdout RMSE is higher than internal test but still < €1M.)
+
+## Final Results:
+
+![alt text](Images/Results.png)
 
 ## Streamlit App
 

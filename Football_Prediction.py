@@ -24,6 +24,8 @@ import joblib
 
     Commit 6 - Modified the ReadME file changed the slight UI for the streamlit application. Preparing for bug squashing and publish streamlit - 8 January 2026
 
+    Commit 7 - Changed and Modified the ReadME File. BugSquashing and publishing Streamlit on the way - 9 January 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")

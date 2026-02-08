@@ -22,9 +22,11 @@ import joblib
 
     Commit 5 - Included a ReadMe File and requirements.txt - 7 Feburary 2026
 
-    Commit 6 - Modified the ReadME file changed the slight UI for the streamlit application. Preparing for bug squashing and publish streamlit - 8 January 2026
+    Commit 6 - Modified the ReadME file changed the slight UI for the streamlit application. Preparing for bug squashing and publish streamlit - 8 February 2026
 
-    Commit 7 - Changed and Modified the ReadME File. BugSquashing and publishing Streamlit on the way - 9 January 2026
+    Commit 7 - Changed and Modified the ReadME File. BugSquashing and publishing Streamlit on the way - 8 February 2026
+
+    Commit 8 - Made some changes to my requirements.txt as it is having troubles deploying in streamlit - 8 February 2026
 
 '''
 

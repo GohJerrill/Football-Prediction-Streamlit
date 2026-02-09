@@ -32,6 +32,8 @@ import joblib
 
     Commit 10 - Added the link in the ReadMe file so people can view it more in depths - 9 Feb 2026
 
+    Commit 11 - Modified the design of the streamlit - 9 Feb 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")
@@ -449,6 +451,13 @@ if st.button("Predict my transfer value 🧾💸"):
         prediction = float(np.expm1(pred_log)) # Convert to € value
         value_million = prediction / 1_000_000
 
+        # VIEW: hide raw + encoded input in expandable accordions
+        with st.expander("Show Raw Input DataFrame (what you typed)"):
+            st.dataframe(input_raw_df, use_container_width=True)
+
+        with st.expander("Show One-Hot Encoded Input (what model receives)"):
+            st.dataframe(input_ohe, use_container_width=True)
+
         st.success(
             f"Your predicted market value is **€{prediction:,.0f}**  "
             f"(~**€{value_million:,.2f} million**)"
@@ -493,14 +502,6 @@ if st.button("Predict my transfer value 🧾💸"):
 
         if img_path is not None:
             st.image(img_path, caption=img_caption, width="stretch")
-
-        # VIEW: show raw + encoded input
-        st.markdown("#### Table: Raw Input DataFrame")
-        st.dataframe(input_raw_df)
-
-        st.markdown("#### Table: One-Hot Encoded Input")
-        st.dataframe(input_ohe)
-
 
     except Exception as e:
         st.error("Something went wrong when making the prediction. Check the feature columns / model file.")

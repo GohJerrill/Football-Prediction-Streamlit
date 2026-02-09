@@ -34,6 +34,8 @@ import joblib
 
     Commit 11 - Modified the design of the streamlit - 9 Feb 2026
 
+    Commit 12 - Removed the dev container file - 9 Feb 2026
+
 '''
 
 icon = Image.open("Images/Icon3.png")
